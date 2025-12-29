@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>OneAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      color: #e5e7eb;
+      font-family: system-ui;
+    }
+    .card {
+      padding: 50px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+    h1 { font-size: 42px; margin-bottom: 10px; }
+    p { opacity: 0.8; margin-bottom: 20px; }
+    .badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #6366f1, #22d3ee);
+      color: #020617;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    textarea { width: 100%; margin-bottom:10px; padding:10px; border-radius:8px; }
+    button { padding:10px 20px; border-radius:8px; cursor:pointer; }
+    pre { margin-top:15px; text-align:left; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">COMING SOON</div>
+    <h1>OneAI</h1>
+    <p>Все нейросети в одном месте.<br>Один баланс. Без подписок.</p>
+    <textarea id="userMessage" placeholder="Напиши сообщение" rows="4"></textarea>
+    <button id="sendBtn">Отправить</button>
+    <pre id="reply"></pre>
+  </div>
+
+  <script>
+    const sendBtn = document.getElementById("sendBtn");
+    const userMessage = document.getElementById("userMessage");
+    const reply = document.getElementById("reply");
+
+    sendBtn.onclick = async () => {
+      const msg = userMessage.value;
+      if (!msg) return alert("Напиши сообщение!");
+
+      reply.textContent = "Загрузка...";
+
+      const res = await fetch("/api/artemox", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+      });
+
+      const data = await res.json();
+      reply.textContent = data.reply || "Ошибка";
+    };
+  </script>
+</body>
+</html>
