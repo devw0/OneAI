@@ -1,73 +1,152 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>OneAI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: radial-gradient(circle at top, #0f172a, #020617);
-      color: #e5e7eb;
-      font-family: system-ui;
-    }
-    .card {
-      padding: 50px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.05);
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-    }
-    h1 { font-size: 42px; margin-bottom: 10px; }
-    p { opacity: 0.8; margin-bottom: 20px; }
-    .badge {
-      display: inline-block;
-      padding: 8px 16px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #6366f1, #22d3ee);
-      color: #020617;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-    textarea { width: 100%; margin-bottom:10px; padding:10px; border-radius:8px; }
-    button { padding:10px 20px; border-radius:8px; cursor:pointer; }
-    pre { margin-top:15px; text-align:left; }
-  </style>
+<meta charset="UTF-8">
+<title>OneAI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: system-ui;
+  background: #0b0f1a;
+  color: #e5e7eb;
+  display: grid;
+  grid-template-rows: 56px 1fr;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+header button {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  color: #e5e7eb;
+  border-radius: 12px;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+main {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+}
+aside {
+  border-right: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+}
+aside .item {
+  padding: 10px;
+  border-radius: 10px;
+  opacity: .8;
+}
+aside .item:hover {
+  background: rgba(255,255,255,.06);
+}
+aside .bottom {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  font-size: 13px;
+}
+section {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.card {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: 18px;
+}
+.card small {
+  opacity: .6;
+}
+.composer {
+  margin-top: auto;
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding-top: 14px;
+}
+.composer-box {
+  display: flex;
+  gap: 10px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: 10px;
+}
+.composer-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e5e7eb;
+}
+.composer-box button {
+  background: rgba(255,255,255,.1);
+  border: none;
+  color: #e5e7eb;
+  border-radius: 10px;
+  padding: 6px 12px;
+}
+</style>
 </head>
+
 <body>
-  <div class="card">
-    <div class="badge">COMING SOON</div>
-    <h1>OneAI</h1>
-    <p>Все нейросети в одном месте.<br>Один баланс. Без подписок.</p>
-    <textarea id="userMessage" placeholder="Напиши сообщение" rows="4"></textarea>
-    <button id="sendBtn">Отправить</button>
-    <pre id="reply"></pre>
-  </div>
 
-  <script>
-    const sendBtn = document.getElementById("sendBtn");
-    const userMessage = document.getElementById("userMessage");
-    const reply = document.getElementById("reply");
+<header>
+  <strong>OneAI</strong>
+  <button>Быстрый выбор ▼</button>
+</header>
 
-    sendBtn.onclick = async () => {
-      const msg = userMessage.value;
-      if (!msg) return alert("Напиши сообщение!");
+<main>
+  <aside>
+    <div class="item">Ассистенты</div>
+    <div class="item">Инструменты AI</div>
+    <div class="item">Креатив</div>
+    <div class="item">Чаты</div>
 
-      reply.textContent = "Загрузка...";
+    <div class="bottom">
+      Егор<br>
+      Баланс: 0 ₽
+    </div>
+  </aside>
 
-      const res = await fetch("/api/artemox", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg })
-      });
+  <section>
+    <h1>Добро пожаловать в OneAI</h1>
+    <p style="opacity:.7">Все нейросети в одном месте</p>
 
-      const data = await res.json();
-      reply.textContent = data.reply || "Ошибка";
-    };
-  </script>
+    <div class="cards">
+      <div class="card"><b>ChatGPT</b><br><small>OpenAI</small></div>
+      <div class="card"><b>Claude</b><br><small>Anthropic</small></div>
+      <div class="card"><b>Gemini</b><br><small>Google</small></div>
+      <div class="card"><b>Perplexity</b><br><small>Поиск</small></div>
+      <div class="card"><b>Suno</b><br><small>Музыка</small></div>
+      <div class="card"><b>Wan 2.6</b><br><small>Видео</small></div>
+    </div>
+
+    <div class="composer">
+      <div class="composer-box">
+        <button>📎</button>
+        <input placeholder="Отправить сообщение">
+        <button>ChatGPT</button>
+        <button>▶</button>
+      </div>
+    </div>
+  </section>
+</main>
+
 </body>
 </html>
