@@ -1,152 +1,384 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>OneAI</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  height: 100vh;
-  font-family: system-ui;
-  background: #0b0f1a;
-  color: #e5e7eb;
-  display: grid;
-  grid-template-rows: 56px 1fr;
-}
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
-header button {
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.12);
-  color: #e5e7eb;
-  border-radius: 12px;
-  padding: 6px 14px;
-  cursor: pointer;
-}
-main {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-}
-aside {
-  border-right: 1px solid rgba(255,255,255,.08);
-  display: flex;
-  flex-direction: column;
-  padding: 14px;
-}
-aside .item {
-  padding: 10px;
-  border-radius: 10px;
-  opacity: .8;
-}
-aside .item:hover {
-  background: rgba(255,255,255,.06);
-}
-aside .bottom {
-  margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  font-size: 13px;
-}
-section {
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-}
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-}
-.card {
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 16px;
-  padding: 18px;
-}
-.card small {
-  opacity: .6;
-}
-.composer {
-  margin-top: auto;
-  border-top: 1px solid rgba(255,255,255,.08);
-  padding-top: 14px;
-}
-.composer-box {
-  display: flex;
-  gap: 10px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 16px;
-  padding: 10px;
-}
-.composer-box input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #e5e7eb;
-}
-.composer-box button {
-  background: rgba(255,255,255,.1);
-  border: none;
-  color: #e5e7eb;
-  border-radius: 10px;
-  padding: 6px 12px;
-}
+  :root{
+    --bg:#0b0c0f;
+    --panel:#111217;
+    --panel2:#0f1014;
+    --border:rgba(255,255,255,.10);
+    --border2:rgba(255,255,255,.08);
+    --text:#f3f4f6;
+    --muted:rgba(255,255,255,.55);
+    --muted2:rgba(255,255,255,.38);
+    --hover:rgba(255,255,255,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:radial-gradient(1200px 700px at 50% 0%, rgba(255,255,255,.06), transparent 60%),
+               linear-gradient(180deg, #0b0c0f, #07080b);
+    color:var(--text);
+    font-family: Inter, Manrope, "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    letter-spacing:-0.01em;
+  }
+
+  /* TOP BAR */
+  header{
+    height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:sticky;
+    top:0;
+    z-index:10;
+    border-bottom:1px solid var(--border2);
+    backdrop-filter: blur(10px);
+    background:rgba(11,12,15,.72);
+  }
+  .brand{
+    position:absolute;
+    left:18px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    font-weight:600;
+    color:var(--text);
+    opacity:.9;
+  }
+  .brandDot{
+    width:10px;height:10px;border-radius:999px;
+    background:rgba(255,255,255,.35);
+    border:1px solid var(--border);
+  }
+  .modelBtn{
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--border);
+    color:var(--text);
+    border-radius:18px;
+    padding:12px 18px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:240px;
+    justify-content:center;
+  }
+  .modelBtn:hover{ background:rgba(255,255,255,.08); }
+  .chev{opacity:.7}
+
+  /* LAYOUT */
+  main{
+    height:calc(100vh - 72px);
+    display:grid;
+    grid-template-columns: 300px 1fr;
+  }
+
+  /* SIDEBAR: only chats */
+  aside{
+    border-right:1px solid var(--border2);
+    background:rgba(15,16,20,.35);
+    display:flex;
+    flex-direction:column;
+    padding:16px;
+    gap:12px;
+  }
+  .sideTitle{
+    font-size:13px;
+    font-weight:600;
+    color:var(--muted);
+    letter-spacing:.02em;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .newChat{
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.05);
+    color:var(--text);
+    border-radius:12px;
+    padding:10px 12px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:13px;
+  }
+  .newChat:hover{ background:rgba(255,255,255,.07); }
+
+  .chatList{
+    flex:1;
+    overflow:auto;
+    padding-right:4px;
+  }
+  .chatItem{
+    padding:10px 12px;
+    border-radius:12px;
+    cursor:pointer;
+    color:rgba(255,255,255,.80);
+    border:1px solid transparent;
+    margin-bottom:8px;
+    background:transparent;
+  }
+  .chatItem:hover{
+    background:var(--hover);
+    border-color:rgba(255,255,255,.06);
+  }
+  .chatItem.active{
+    background:rgba(255,255,255,.07);
+    border-color:rgba(255,255,255,.10);
+  }
+  .chatEmpty{
+    margin-top:18px;
+    color:var(--muted2);
+    font-size:13px;
+    line-height:1.35;
+    padding:10px 12px;
+    border-radius:12px;
+    border:1px dashed rgba(255,255,255,.10);
+    background:rgba(255,255,255,.03);
+  }
+
+  /* CONTENT */
+  section{
+    position:relative;
+    padding:28px 28px 18px 28px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .hero{
+    padding:18px 18px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:18px;
+    background:rgba(255,255,255,.03);
+  }
+  .hero h1{
+    margin:0 0 6px 0;
+    font-size:26px;
+    font-weight:650;
+  }
+  .hero p{
+    margin:0;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.45;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap:14px;
+  }
+  .card{
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:18px;
+    background:rgba(255,255,255,.03);
+    padding:16px;
+    min-height:90px;
+  }
+  .card b{ font-size:15px; font-weight:650; }
+  .card small{ display:block; margin-top:6px; color:var(--muted); }
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:10px;
+    color:rgba(255,255,255,.75);
+    font-size:12px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.03);
+    padding:6px 10px;
+    border-radius:999px;
+  }
+  .dot{
+    width:7px;height:7px;border-radius:999px;
+    background:rgba(255,255,255,.22);
+    border:1px solid rgba(255,255,255,.18);
+  }
+
+  /* COMPOSER (less wide look, higher input) */
+  .composerWrap{
+    margin-top:auto;
+    display:flex;
+    justify-content:center;
+    padding-top:8px;
+  }
+  .composer{
+    width:min(900px, 100%);
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.04);
+    border-radius:20px;
+    padding:12px;
+  }
+  .composerRow{
+    display:flex;
+    gap:10px;
+    align-items:flex-end;
+  }
+  .iconBtn{
+    width:44px;
+    height:44px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.05);
+    color:rgba(255,255,255,.85);
+    cursor:pointer;
+    font-size:18px;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .iconBtn:hover{ background:rgba(255,255,255,.07); }
+  textarea{
+    flex:1;
+    resize:none;
+    height:54px;          /* higher than before */
+    max-height:140px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.03);
+    border-radius:16px;
+    padding:14px 14px;
+    color:var(--text);
+    outline:none;
+    font-size:14px;
+    line-height:1.35;
+  }
+  textarea::placeholder{ color:rgba(255,255,255,.40); }
+
+  .modelTag{
+    height:44px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.05);
+    padding:0 12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:rgba(255,255,255,.85);
+    font-size:13px;
+    white-space:nowrap;
+  }
+  .sendBtn{
+    height:44px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.10);
+    color:var(--text);
+    padding:0 14px;
+    cursor:pointer;
+    font-weight:650;
+  }
+  .sendBtn:hover{ background:rgba(255,255,255,.14); }
+
+  .composerHint{
+    margin-top:10px;
+    color:var(--muted2);
+    font-size:12px;
+    display:flex;
+    justify-content:space-between;
+  }
+
+  /* responsive */
+  @media (max-width: 920px){
+    main{ grid-template-columns: 1fr; }
+    aside{ display:none; }
+    .brand{ position:static; left:auto; }
+  }
 </style>
 </head>
 
 <body>
-
 <header>
-  <strong>OneAI</strong>
-  <button>Быстрый выбор ▼</button>
+  <div class="brand"><span class="brandDot"></span>OneAI</div>
+  <button class="modelBtn" type="button">
+    Выбор модели <span class="chev">▼</span>
+  </button>
 </header>
 
 <main>
   <aside>
-    <div class="item">Ассистенты</div>
-    <div class="item">Инструменты AI</div>
-    <div class="item">Креатив</div>
-    <div class="item">Чаты</div>
+    <div class="sideTitle">
+      <span>Чаты</span>
+      <span style="opacity:.6">⋯</span>
+    </div>
+    <button class="newChat" type="button">+ Новый чат</button>
 
-    <div class="bottom">
-      Егор<br>
-      Баланс: 0 ₽
+    <div class="chatList">
+      <div class="chatItem active">Новый чат</div>
+      <div class="chatItem">Чат 1</div>
+      <div class="chatItem">Чат 2</div>
+
+      <div class="chatEmpty">
+        Здесь будет история диалогов
+      </div>
     </div>
   </aside>
 
   <section>
-    <h1>Добро пожаловать в OneAI</h1>
-    <p style="opacity:.7">Все нейросети в одном месте</p>
-
-    <div class="cards">
-      <div class="card"><b>ChatGPT</b><br><small>OpenAI</small></div>
-      <div class="card"><b>Claude</b><br><small>Anthropic</small></div>
-      <div class="card"><b>Gemini</b><br><small>Google</small></div>
-      <div class="card"><b>Perplexity</b><br><small>Поиск</small></div>
-      <div class="card"><b>Suno</b><br><small>Музыка</small></div>
-      <div class="card"><b>Wan 2.6</b><br><small>Видео</small></div>
+    <div class="hero">
+      <h1>Добро пожаловать в OneAI</h1>
+      <p>Одна платформа, разные нейросети. Баланс в рублях.</p>
     </div>
 
-    <div class="composer">
-      <div class="composer-box">
-        <button>📎</button>
-        <input placeholder="Отправить сообщение">
-        <button>ChatGPT</button>
-        <button>▶</button>
+    <div class="grid">
+      <div class="card">
+        <b>ChatGPT</b>
+        <small>Текст</small>
+        <span class="pill"><span class="dot"></span>доступно позже</span>
+      </div>
+      <div class="card">
+        <b>Claude</b>
+        <small>Текст</small>
+        <span class="pill"><span class="dot"></span>скоро</span>
+      </div>
+      <div class="card">
+        <b>Gemini</b>
+        <small>Текст</small>
+        <span class="pill"><span class="dot"></span>скоро</span>
+      </div>
+      <div class="card">
+        <b>Perplexity</b>
+        <small>Поиск</small>
+        <span class="pill"><span class="dot"></span>скоро</span>
+      </div>
+      <div class="card">
+        <b>Suno</b>
+        <small>Музыка</small>
+        <span class="pill"><span class="dot"></span>скоро</span>
+      </div>
+      <div class="card">
+        <b>Wan 2.6</b>
+        <small>Видео</small>
+        <span class="pill"><span class="dot"></span>скоро</span>
+      </div>
+    </div>
+
+    <div class="composerWrap">
+      <div class="composer">
+        <div class="composerRow">
+          <button class="iconBtn" type="button">＋</button>
+          <textarea placeholder="Отправить сообщение"></textarea>
+          <div class="modelTag">ChatGPT</div>
+          <button class="sendBtn" type="button">Отправить</button>
+        </div>
+        <div class="composerHint">
+          <span>Баланс: 0 ₽</span>
+          <span>Демо-обложка</span>
+        </div>
       </div>
     </div>
   </section>
 </main>
-
 </body>
 </html>
