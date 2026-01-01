@@ -14,7 +14,7 @@
     --bg:#0b0c0f;
     --bg2:#07080b;
     --panel:rgba(255,255,255,.04);
-    --panel2:rgba(255,255,255,.06); /* кнопки/плашки чуть светлее */
+    --panel2:rgba(255,255,255,.06);
     --border:rgba(255,255,255,.12);
     --border2:rgba(255,255,255,.09);
     --text:#f3f4f6;
@@ -61,7 +61,6 @@
     border:1px solid var(--border);
   }
 
-  /* кнопка выбора нейросети по ширине текста */
   .modelPicker{ position:relative; }
   .modelBtn{
     background:var(--panel2);
@@ -170,7 +169,7 @@
     flex:1;
     overflow:auto;
     padding-right:4px;
-    padding-bottom:92px; /* под аккаунт блок */
+    padding-bottom:92px;
   }
   .chatItem{
     padding:10px 12px;
@@ -194,7 +193,7 @@
     padding-top:12px;
     display:flex;
     gap:12px;
-    align-items:center;
+    align-items:flex-start; /* FIX: чтобы ничего не лезло под кнопки */
     justify-content:space-between;
   }
   .avatar{
@@ -314,13 +313,11 @@
     padding:14px;
     position:relative;
   }
-
   .composerInner{
     display:flex;
     flex-direction:column;
     gap:12px;
   }
-
   .composerTop{
     display:flex;
     gap:12px;
@@ -338,7 +335,6 @@
     margin-top:2px;
   }
   .gridIcon svg{ opacity:.7 }
-
   .prompt{
     flex:1;
     min-height:38px;
@@ -429,7 +425,7 @@
   }
   .sendCircle svg{ opacity:.6 }
 
-  /* модалки входа/регистрации */
+  /* модалки */
   .overlay{
     position:fixed;
     inset:0;
@@ -537,7 +533,6 @@
     <div class="accountBox" id="accountGuest">
       <div class="accountLeft">
         <div class="avatar" aria-hidden="true">
-          <!-- обезличенный человек -->
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
             <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Z" stroke="white" stroke-width="1.6" opacity=".8"/>
             <path d="M4.5 20c1.6-4.2 13.4-4.2 15 0" stroke="white" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
@@ -545,7 +540,7 @@
         </div>
         <div class="accountText">
           <div class="accountName">Гость</div>
-          <div class="accountBalance">Баланс: 0 ₽</div>
+          <!-- FIX: баланс гостю не показываем, чтобы не торчал кусок ₽ -->
         </div>
       </div>
       <div class="authBtns">
@@ -589,7 +584,6 @@
       <div class="card"><b>Wan 2.6</b><small>Видео</small></div>
     </div>
 
-    <!-- COMPOSER -->
     <div class="composerWrap">
       <div class="composer">
         <div class="composerInner">
@@ -712,7 +706,6 @@
 <script>
   // ====== MODEL PICKER (static) ======
   const modelBtn = document.getElementById('modelBtn');
-  const modelBtnText = document.getElementById('modelBtnText');
   const modelMenu = document.getElementById('modelMenu');
   const modelName = document.getElementById('modelName');
 
@@ -720,6 +713,7 @@
     e.stopPropagation();
     modelMenu.classList.toggle('open');
   });
+
   modelMenu.addEventListener('click', (e) => {
     e.stopPropagation();
     const btn = e.target.closest('.modelItem');
@@ -729,11 +723,10 @@
     modelMenu.querySelectorAll('.modelItem').forEach(x => x.classList.remove('active'));
     btn.classList.add('active');
 
-    const m = btn.dataset.model;
-    modelName.textContent = m;
-    modelBtnText.textContent = "Выбор нейросети"; // текст кнопки оставляем как ты просил
+    modelName.textContent = btn.dataset.model;
     modelMenu.classList.remove('open');
   });
+
   document.addEventListener('click', () => modelMenu.classList.remove('open'));
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') modelMenu.classList.remove('open'); });
 
@@ -750,18 +743,10 @@
     try { return JSON.parse(localStorage.getItem(KEY_USERS)) || []; }
     catch { return []; }
   }
-  function setUsers(users){
-    localStorage.setItem(KEY_USERS, JSON.stringify(users));
-  }
-  function getCurrent(){
-    return localStorage.getItem(KEY_CURRENT);
-  }
-  function setCurrent(login){
-    localStorage.setItem(KEY_CURRENT, login);
-  }
-  function clearCurrent(){
-    localStorage.removeItem(KEY_CURRENT);
-  }
+  function setUsers(users){ localStorage.setItem(KEY_USERS, JSON.stringify(users)); }
+  function getCurrent(){ return localStorage.getItem(KEY_CURRENT); }
+  function setCurrent(login){ localStorage.setItem(KEY_CURRENT, login); }
+  function clearCurrent(){ localStorage.removeItem(KEY_CURRENT); }
 
   function renderAccount(){
     const login = getCurrent();
