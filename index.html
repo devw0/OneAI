@@ -12,21 +12,23 @@
 <style>
   :root{
     --bg:#0b0c0f;
-    --panel:#111217;
-    --panel2:#0f1014;
-    --border:rgba(255,255,255,.10);
-    --border2:rgba(255,255,255,.08);
+    --bg2:#07080b;
+    --panel:rgba(255,255,255,.04);
+    --panel2:rgba(255,255,255,.06); /* кнопки/плашки чуть светлее */
+    --border:rgba(255,255,255,.12);
+    --border2:rgba(255,255,255,.09);
     --text:#f3f4f6;
-    --muted:rgba(255,255,255,.55);
-    --muted2:rgba(255,255,255,.38);
-    --hover:rgba(255,255,255,.06);
+    --muted:rgba(255,255,255,.58);
+    --muted2:rgba(255,255,255,.40);
+    --hover:rgba(255,255,255,.07);
+    --shadow: 0 20px 60px rgba(0,0,0,.45);
   }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
     margin:0;
     background:radial-gradient(1200px 700px at 50% 0%, rgba(255,255,255,.06), transparent 60%),
-               linear-gradient(180deg, #0b0c0f, #07080b);
+               linear-gradient(180deg, var(--bg), var(--bg2));
     color:var(--text);
     font-family: Inter, Manrope, "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
     letter-spacing:-0.01em;
@@ -58,24 +60,75 @@
     background:rgba(255,255,255,.35);
     border:1px solid var(--border);
   }
+
+  /* кнопка выбора нейросети по ширине текста */
+  .modelPicker{ position:relative; }
   .modelBtn{
-    background:rgba(255,255,255,.06);
+    background:var(--panel2);
     border:1px solid var(--border);
     color:var(--text);
-    border-radius:18px;
-    padding:12px 18px;
+    border-radius:16px;
+    padding:10px 14px;
     font-size:14px;
-    font-weight:400; /* тоньше */
+    font-weight:400;
     cursor:pointer;
-    display:flex;
+    display:inline-flex;
     align-items:center;
     gap:10px;
-    min-width:240px;
     justify-content:center;
-    opacity:.95;
+    width:auto;
   }
-  .modelBtn:hover{ background:rgba(255,255,255,.08); }
+  .modelBtn:hover{ background:rgba(255,255,255,.09); }
   .chev{opacity:.65}
+
+  .modelMenu{
+    position:absolute;
+    top:56px;
+    left:50%;
+    transform:translateX(-50%);
+    width:300px;
+    background:rgba(17,18,23,.92);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:16px;
+    padding:10px;
+    box-shadow: var(--shadow);
+    display:none;
+  }
+  .modelMenu.open{ display:block; }
+  .modelMenuTitle{
+    font-size:12px;
+    color: rgba(255,255,255,.45);
+    padding:8px 10px 6px 10px;
+    font-weight:500;
+  }
+  .modelItem{
+    width:100%;
+    text-align:left;
+    border:1px solid transparent;
+    background:transparent;
+    color:rgba(255,255,255,.88);
+    padding:10px 10px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:13px;
+  }
+  .modelItem:hover{
+    background:rgba(255,255,255,.06);
+    border-color:rgba(255,255,255,.08);
+  }
+  .modelItem.active{
+    background:rgba(255,255,255,.07);
+    border-color:rgba(255,255,255,.12);
+  }
+  .modelItem.disabled{
+    opacity:.45;
+    cursor:not-allowed;
+  }
+  .modelMenuSep{
+    height:1px;
+    background:rgba(255,255,255,.08);
+    margin:8px 6px;
+  }
 
   main{
     height:calc(100vh - 72px);
@@ -103,7 +156,7 @@
   }
   .newChat{
     border:1px solid var(--border);
-    background:rgba(255,255,255,.05);
+    background:var(--panel2);
     color:var(--text);
     border-radius:12px;
     padding:10px 12px;
@@ -111,13 +164,13 @@
     font-weight:600;
     font-size:13px;
   }
-  .newChat:hover{ background:rgba(255,255,255,.07); }
+  .newChat:hover{ background:rgba(255,255,255,.09); }
 
   .chatList{
     flex:1;
     overflow:auto;
     padding-right:4px;
-    padding-bottom:72px; /* чтобы не залезало на блок аккаунта */
+    padding-bottom:92px; /* под аккаунт блок */
   }
   .chatItem{
     padding:10px 12px;
@@ -128,15 +181,10 @@
     margin-bottom:8px;
     background:transparent;
   }
-  .chatItem:hover{
-    background:var(--hover);
-    border-color:rgba(255,255,255,.06);
-  }
-  .chatItem.active{
-    background:rgba(255,255,255,.07);
-    border-color:rgba(255,255,255,.10);
-  }
+  .chatItem:hover{ background:var(--hover); border-color:rgba(255,255,255,.06); }
+  .chatItem.active{ background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.12); }
 
+  /* нижний левый блок аккаунта */
   .accountBox{
     position:absolute;
     left:16px;
@@ -144,18 +192,76 @@
     bottom:16px;
     border-top:1px solid rgba(255,255,255,.08);
     padding-top:12px;
-    font-size:13px;
-    color:rgba(255,255,255,.82);
     display:flex;
+    gap:12px;
+    align-items:center;
     justify-content:space-between;
-    align-items:flex-end;
-    gap:10px;
   }
-  .accountBox .muted{ color:var(--muted); font-size:12px; }
+  .avatar{
+    width:44px;height:44px;
+    border-radius:999px;
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+  }
+  .avatar svg{ opacity:.8 }
+  .accountLeft{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    min-width:0;
+  }
+  .accountText{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    min-width:0;
+  }
+  .accountName{
+    font-size:13px;
+    color:rgba(255,255,255,.90);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:160px;
+  }
+  .accountBalance{
+    font-size:12px;
+    color:var(--muted);
+  }
+  .authBtns{
+    display:flex;
+    gap:8px;
+    align-items:center;
+  }
+  .btnWhite{
+    background:#ffffff;
+    color:#0b0c0f;
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:12px;
+    padding:8px 10px;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .btnGray{
+    background:var(--panel2);
+    color:rgba(255,255,255,.85);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:12px;
+    padding:8px 10px;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .btnGray:hover{ background:rgba(255,255,255,.09); }
+  .btnWhite:hover{ filter:brightness(.96); }
 
   section{
-    position:relative;
-    padding:28px 28px 18px 28px;
+    padding:22px 26px 18px 26px;
     display:flex;
     flex-direction:column;
     gap:16px;
@@ -188,12 +294,12 @@
     border-radius:18px;
     background:rgba(255,255,255,.03);
     padding:16px;
-    min-height:86px;
+    min-height:84px;
   }
   .card b{ font-size:15px; font-weight:600; }
   .card small{ display:block; margin-top:6px; color:var(--muted); }
 
-  /* COMPOSER — прямоугольник, чуть светлее фона */
+  /* composer как на картинке 2 */
   .composerWrap{
     margin-top:auto;
     display:flex;
@@ -201,67 +307,74 @@
     padding-top:8px;
   }
   .composer{
-    width:min(920px, 100%);
+    width:min(980px, 100%);
     border:1px solid rgba(255,255,255,.12);
     background:rgba(255,255,255,.06);
-    border-radius:18px;
+    border-radius:22px;
     padding:14px;
     position:relative;
   }
-  textarea{
-    width:100%;
-    resize:none;
-    height:86px;          /* более высокий */
-    max-height:180px;
+
+  .composerInner{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .composerTop{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .gridIcon{
+    width:28px;height:28px;
+    border-radius:10px;
+    background:rgba(255,255,255,.06);
     border:1px solid rgba(255,255,255,.10);
-    background:rgba(0,0,0,.06);
-    border-radius:14px;
-    padding:14px 14px 54px 14px; /* место под нижние иконки */
-    color:var(--text);
-    outline:none;
-    font-size:14px;
-    line-height:1.35;
-  }
-  textarea::placeholder{ color:rgba(255,255,255,.40); }
-
-  .composerBottom{
-    position:absolute;
-    left:14px;
-    right:14px;
-    bottom:14px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    pointer-events:none; /* чисто визуально */
-  }
-
-  .leftControls{
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-
-  .plusBtn{
-    width:34px;height:34px;
-    border-radius:12px;
-    border:1px solid rgba(255,255,255,.14);
-    background:rgba(255,255,255,.08);
-    color:#fff;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:18px;
-    line-height:1;
+    flex:0 0 auto;
+    margin-top:2px;
+  }
+  .gridIcon svg{ opacity:.7 }
+
+  .prompt{
+    flex:1;
+    min-height:38px;
+    display:flex;
+    align-items:flex-start;
+  }
+  .prompt input{
+    width:100%;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:var(--text);
+    font-size:14px;
+    padding:6px 2px;
+  }
+  .prompt input::placeholder{ color:rgba(255,255,255,.45); }
+
+  .composerBottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
   }
 
-  .modelName{
-    color:rgba(255,255,255,.78);
-    font-size:13px;
-    border:1px solid rgba(255,255,255,.12);
-    background:rgba(255,255,255,.05);
-    padding:7px 10px;
-    border-radius:12px;
+  .leftAttach{
+    width:36px;height:36px;
+    border-radius:14px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    cursor:pointer;
   }
+  .leftAttach svg{ opacity:.65 }
 
   .rightControls{
     display:flex;
@@ -269,31 +382,110 @@
     gap:10px;
   }
 
-  /* минималистичный микрофон (svg) */
-  .mic{
-    width:34px;height:34px;
-    border-radius:12px;
-    border:1px solid rgba(255,255,255,.12);
+  .modelPill{
+    display:flex;
+    align-items:center;
+    gap:10px;
     background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:16px;
+    padding:8px 12px;
+    color:rgba(255,255,255,.90);
+    font-size:13px;
+    white-space:nowrap;
+  }
+  .openaiMark{
+    width:22px;height:22px;
+    border-radius:999px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
     display:flex;
     align-items:center;
     justify-content:center;
   }
-  .mic svg{ opacity:.65 }
+  .openaiMark svg{ opacity:.75 }
 
-  /* белый круг справа снизу со стрелкой серой */
+  .micBtn{
+    width:44px;height:44px;
+    border-radius:999px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .micBtn svg{ opacity:.6 }
+
   .sendCircle{
-    width:38px;height:38px;
+    width:44px;height:44px;
     border-radius:999px;
     background:#ffffff;
+    border:1px solid rgba(0,0,0,.08);
     display:flex;
     align-items:center;
     justify-content:center;
-    border:1px solid rgba(0,0,0,.08);
+    cursor:pointer;
   }
-  .sendCircle svg{ opacity:.55 }
+  .sendCircle svg{ opacity:.6 }
 
-  @media (max-width: 920px){
+  /* модалки входа/регистрации */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+  }
+  .overlay.open{ display:flex; }
+  .modal{
+    width:360px;
+    background:rgba(17,18,23,.94);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:18px;
+    padding:16px;
+    box-shadow: var(--shadow);
+  }
+  .modal h3{
+    margin:0 0 10px 0;
+    font-size:16px;
+    font-weight:600;
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-top:10px;
+  }
+  .field label{ font-size:12px; color:rgba(255,255,255,.55); }
+  .field input{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:12px;
+    padding:10px 10px;
+    color:var(--text);
+    outline:none;
+    font-size:13px;
+  }
+  .modalActions{
+    display:flex;
+    gap:8px;
+    margin-top:14px;
+  }
+  .modalActions button{ flex:1; }
+  .closeX{
+    position:absolute;
+    right:18px;
+    top:14px;
+    opacity:.6;
+    cursor:pointer;
+    user-select:none;
+  }
+  .modalWrap{ position:relative; }
+
+  @media (max-width: 980px){
     main{ grid-template-columns: 1fr; }
     aside{ display:none; }
     .brand{ position:static; left:auto; }
@@ -302,11 +494,29 @@
 </head>
 
 <body>
+
 <header>
   <div class="brand"><span class="brandDot"></span>OneAI</div>
-  <button class="modelBtn" type="button">
-    Выбор модели <span class="chev">▼</span>
-  </button>
+
+  <div class="modelPicker">
+    <button class="modelBtn" id="modelBtn" type="button">
+      <span id="modelBtnText">Выбор нейросети</span>
+      <span class="chev">▼</span>
+    </button>
+
+    <div class="modelMenu" id="modelMenu">
+      <div class="modelMenuTitle">Текст</div>
+      <button class="modelItem active" data-model="ChatGPT">ChatGPT</button>
+      <button class="modelItem" data-model="Claude">Claude</button>
+      <button class="modelItem" data-model="Gemini">Gemini</button>
+      <button class="modelItem" data-model="Perplexity">Perplexity</button>
+
+      <div class="modelMenuSep"></div>
+      <div class="modelMenuTitle">Скоро</div>
+      <button class="modelItem disabled" data-model="Suno">Suno</button>
+      <button class="modelItem disabled" data-model="Wan 2.6">Wan 2.6</button>
+    </div>
+  </div>
 </header>
 
 <main>
@@ -323,14 +533,43 @@
       <div class="chatItem">Чат 2</div>
     </div>
 
-    <div class="accountBox">
-      <div>
-        <div class="muted">Аккаунт</div>
-        <div>Егор</div>
+    <!-- До входа -->
+    <div class="accountBox" id="accountGuest">
+      <div class="accountLeft">
+        <div class="avatar" aria-hidden="true">
+          <!-- обезличенный человек -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Z" stroke="white" stroke-width="1.6" opacity=".8"/>
+            <path d="M4.5 20c1.6-4.2 13.4-4.2 15 0" stroke="white" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+          </svg>
+        </div>
+        <div class="accountText">
+          <div class="accountName">Гость</div>
+          <div class="accountBalance">Баланс: 0 ₽</div>
+        </div>
       </div>
-      <div style="text-align:right">
-        <div class="muted">Баланс</div>
-        <div>0 ₽</div>
+      <div class="authBtns">
+        <button class="btnWhite" id="btnRegister" type="button">Зарегистрироваться</button>
+        <button class="btnGray" id="btnLogin" type="button">Войти</button>
+      </div>
+    </div>
+
+    <!-- После входа -->
+    <div class="accountBox" id="accountUser" style="display:none;">
+      <div class="accountLeft">
+        <div class="avatar" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Z" stroke="white" stroke-width="1.6" opacity=".8"/>
+            <path d="M4.5 20c1.6-4.2 13.4-4.2 15 0" stroke="white" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+          </svg>
+        </div>
+        <div class="accountText">
+          <div class="accountName" id="userName">Имя</div>
+          <div class="accountBalance">Баланс: <span id="userBalance">0</span> ₽</div>
+        </div>
+      </div>
+      <div class="authBtns">
+        <button class="btnGray" id="btnLogout" type="button">Выйти</button>
       </div>
     </div>
   </aside>
@@ -350,43 +589,257 @@
       <div class="card"><b>Wan 2.6</b><small>Видео</small></div>
     </div>
 
+    <!-- COMPOSER -->
     <div class="composerWrap">
       <div class="composer">
-        <textarea placeholder="Отправить сообщение"></textarea>
-
-        <div class="composerBottom">
-          <div class="leftControls">
-            <div class="plusBtn">+</div>
-          </div>
-
-          <div class="rightControls">
-            <div class="modelName">ChatGPT</div>
-
-            <div class="mic">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Z"
-                      stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-                <path d="M19 11a7 7 0 0 1-14 0"
-                      stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-                <path d="M12 18v3" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-                <path d="M8 21h8" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
+        <div class="composerInner">
+          <div class="composerTop">
+            <div class="gridIcon" title="Меню">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M5 5h6v6H5V5Z" stroke="white" stroke-width="1.7" opacity=".8"/>
+                <path d="M13 5h6v6h-6V5Z" stroke="white" stroke-width="1.7" opacity=".8"/>
+                <path d="M5 13h6v6H5v-6Z" stroke="white" stroke-width="1.7" opacity=".8"/>
+                <path d="M13 13h6v6h-6v-6Z" stroke="white" stroke-width="1.7" opacity=".8"/>
               </svg>
             </div>
 
-            <div class="sendCircle">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 17L17 7" stroke="#111" stroke-width="2" stroke-linecap="round"/>
-                <path d="M9 7h8v8" stroke="#111" stroke-width="2" stroke-linecap="round"/>
-              </svg>
+            <div class="prompt">
+              <input id="promptInput" placeholder="Отправить сообщение" />
             </div>
           </div>
+
+          <div class="composerBottom">
+            <div class="leftAttach" title="Прикрепить (скоро)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M12 13.5l4.95-4.95a3.5 3.5 0 0 0-4.95-4.95L6.7 8.95a5 5 0 0 0 7.07 7.07l6.01-6.01"
+                      stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+
+            <div class="rightControls">
+              <div class="modelPill" title="Выбранная модель">
+                <span class="openaiMark" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3.2c2.3 0 4.3 1.3 5.3 3.3 2 .6 3.4 2.4 3.4 4.6 0 2.7-2.2 4.9-4.9 4.9-.3 0-.6 0-.9-.1-1.1 1.8-3.1 3-5.4 3-2.3 0-4.3-1.3-5.3-3.3-2-.6-3.4-2.4-3.4-4.6 0-2.7 2.2-4.9 4.9-4.9.3 0 .6 0 .9.1C7.7 4.4 9.7 3.2 12 3.2Z"
+                          stroke="white" stroke-width="1.6" opacity=".85"/>
+                  </svg>
+                </span>
+                <span id="modelName">ChatGPT</span>
+              </div>
+
+              <div class="micBtn" title="Микрофон (скоро)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Z"
+                        stroke="white" stroke-width="1.7" stroke-linecap="round"/>
+                  <path d="M19 11a7 7 0 0 1-14 0"
+                        stroke="white" stroke-width="1.7" stroke-linecap="round"/>
+                  <path d="M12 18v3" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
+                  <path d="M8 21h8" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
+                </svg>
+              </div>
+
+              <div class="sendCircle" id="sendBtn" title="Отправить (пока не работает)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M7 17L17 7" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M9 7h8v8" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
         </div>
-
       </div>
     </div>
+
   </section>
 </main>
+
+<!-- REGISTER MODAL -->
+<div class="overlay" id="regOverlay">
+  <div class="modalWrap">
+    <div class="modal">
+      <div class="closeX" data-close="regOverlay">✕</div>
+      <h3>Регистрация</h3>
+
+      <div class="field">
+        <label>Имя</label>
+        <input id="regName" placeholder="Например: Егор">
+      </div>
+
+      <div class="field">
+        <label>Логин</label>
+        <input id="regLogin" placeholder="Логин">
+      </div>
+
+      <div class="field">
+        <label>Пароль</label>
+        <input id="regPass" type="password" placeholder="Пароль">
+      </div>
+
+      <div class="modalActions">
+        <button class="btnWhite" id="regSubmit" type="button">Создать</button>
+        <button class="btnGray" data-close="regOverlay" type="button">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="overlay" id="loginOverlay">
+  <div class="modalWrap">
+    <div class="modal">
+      <div class="closeX" data-close="loginOverlay">✕</div>
+      <h3>Вход</h3>
+
+      <div class="field">
+        <label>Логин</label>
+        <input id="logLogin" placeholder="Логин">
+      </div>
+
+      <div class="field">
+        <label>Пароль</label>
+        <input id="logPass" type="password" placeholder="Пароль">
+      </div>
+
+      <div class="modalActions">
+        <button class="btnWhite" id="logSubmit" type="button">Войти</button>
+        <button class="btnGray" data-close="loginOverlay" type="button">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ====== MODEL PICKER (static) ======
+  const modelBtn = document.getElementById('modelBtn');
+  const modelBtnText = document.getElementById('modelBtnText');
+  const modelMenu = document.getElementById('modelMenu');
+  const modelName = document.getElementById('modelName');
+
+  modelBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    modelMenu.classList.toggle('open');
+  });
+  modelMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const btn = e.target.closest('.modelItem');
+    if(!btn) return;
+    if(btn.classList.contains('disabled')) return;
+
+    modelMenu.querySelectorAll('.modelItem').forEach(x => x.classList.remove('active'));
+    btn.classList.add('active');
+
+    const m = btn.dataset.model;
+    modelName.textContent = m;
+    modelBtnText.textContent = "Выбор нейросети"; // текст кнопки оставляем как ты просил
+    modelMenu.classList.remove('open');
+  });
+  document.addEventListener('click', () => modelMenu.classList.remove('open'));
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') modelMenu.classList.remove('open'); });
+
+  // ====== AUTH (demo localStorage) ======
+  const KEY_USERS = "oneai_users";
+  const KEY_CURRENT = "oneai_current";
+
+  const accountGuest = document.getElementById('accountGuest');
+  const accountUser  = document.getElementById('accountUser');
+  const userNameEl = document.getElementById('userName');
+  const userBalEl  = document.getElementById('userBalance');
+
+  function getUsers(){
+    try { return JSON.parse(localStorage.getItem(KEY_USERS)) || []; }
+    catch { return []; }
+  }
+  function setUsers(users){
+    localStorage.setItem(KEY_USERS, JSON.stringify(users));
+  }
+  function getCurrent(){
+    return localStorage.getItem(KEY_CURRENT);
+  }
+  function setCurrent(login){
+    localStorage.setItem(KEY_CURRENT, login);
+  }
+  function clearCurrent(){
+    localStorage.removeItem(KEY_CURRENT);
+  }
+
+  function renderAccount(){
+    const login = getCurrent();
+    if(!login){
+      accountGuest.style.display = "flex";
+      accountUser.style.display = "none";
+      return;
+    }
+    const user = getUsers().find(u => u.login === login);
+    if(!user){
+      clearCurrent();
+      accountGuest.style.display = "flex";
+      accountUser.style.display = "none";
+      return;
+    }
+    accountGuest.style.display = "none";
+    accountUser.style.display = "flex";
+    userNameEl.textContent = user.name;
+    userBalEl.textContent = user.balance ?? 0;
+  }
+
+  // modals
+  const regOverlay = document.getElementById('regOverlay');
+  const loginOverlay = document.getElementById('loginOverlay');
+
+  function openOverlay(el){ el.classList.add('open'); }
+  function closeOverlay(el){ el.classList.remove('open'); }
+
+  document.querySelectorAll('[data-close]').forEach(x=>{
+    x.addEventListener('click', ()=> closeOverlay(document.getElementById(x.dataset.close)));
+  });
+  [regOverlay, loginOverlay].forEach(ov=>{
+    ov.addEventListener('click', (e)=>{ if(e.target === ov) closeOverlay(ov); });
+  });
+
+  document.getElementById('btnRegister').addEventListener('click', ()=> openOverlay(regOverlay));
+  document.getElementById('btnLogin').addEventListener('click', ()=> openOverlay(loginOverlay));
+  document.getElementById('btnLogout').addEventListener('click', ()=>{
+    clearCurrent();
+    renderAccount();
+  });
+
+  document.getElementById('regSubmit').addEventListener('click', ()=>{
+    const name = document.getElementById('regName').value.trim();
+    const login = document.getElementById('regLogin').value.trim();
+    const pass = document.getElementById('regPass').value.trim();
+    if(!name || !login || !pass) return alert("Заполни всё");
+
+    const users = getUsers();
+    if(users.some(u => u.login === login)) return alert("Логин занят");
+
+    users.push({ name, login, pass, balance: 0 });
+    setUsers(users);
+    setCurrent(login);
+    closeOverlay(regOverlay);
+    renderAccount();
+  });
+
+  document.getElementById('logSubmit').addEventListener('click', ()=>{
+    const login = document.getElementById('logLogin').value.trim();
+    const pass = document.getElementById('logPass').value.trim();
+    if(!login || !pass) return alert("Заполни всё");
+
+    const user = getUsers().find(u => u.login === login && u.pass === pass);
+    if(!user) return alert("Неверный логин или пароль");
+
+    setCurrent(login);
+    closeOverlay(loginOverlay);
+    renderAccount();
+  });
+
+  renderAccount();
+
+  // send button (visual only)
+  document.getElementById('sendBtn').addEventListener('click', ()=>{
+    alert("Пока без бэка. Следующий шаг — подключение модели.");
+  });
+</script>
+
 </body>
 </html>
