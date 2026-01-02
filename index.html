@@ -61,7 +61,6 @@
     border:1px solid var(--border);
   }
 
-  .modelPicker{ position:relative; }
   .modelBtn{
     background:var(--panel2);
     border:1px solid var(--border);
@@ -79,55 +78,6 @@
   }
   .modelBtn:hover{ background:rgba(255,255,255,.09); }
   .chev{opacity:.65}
-
-  .modelMenu{
-    position:absolute;
-    top:56px;
-    left:50%;
-    transform:translateX(-50%);
-    width:300px;
-    background:rgba(17,18,23,.92);
-    border:1px solid rgba(255,255,255,.12);
-    border-radius:16px;
-    padding:10px;
-    box-shadow: var(--shadow);
-    display:none;
-  }
-  .modelMenu.open{ display:block; }
-  .modelMenuTitle{
-    font-size:12px;
-    color: rgba(255,255,255,.45);
-    padding:8px 10px 6px 10px;
-    font-weight:500;
-  }
-  .modelItem{
-    width:100%;
-    text-align:left;
-    border:1px solid transparent;
-    background:transparent;
-    color:rgba(255,255,255,.88);
-    padding:10px 10px;
-    border-radius:12px;
-    cursor:pointer;
-    font-size:13px;
-  }
-  .modelItem:hover{
-    background:rgba(255,255,255,.06);
-    border-color:rgba(255,255,255,.08);
-  }
-  .modelItem.active{
-    background:rgba(255,255,255,.07);
-    border-color:rgba(255,255,255,.12);
-  }
-  .modelItem.disabled{
-    opacity:.45;
-    cursor:not-allowed;
-  }
-  .modelMenuSep{
-    height:1px;
-    background:rgba(255,255,255,.08);
-    margin:8px 6px;
-  }
 
   main{
     height:calc(100vh - 72px);
@@ -183,7 +133,6 @@
   .chatItem:hover{ background:var(--hover); border-color:rgba(255,255,255,.06); }
   .chatItem.active{ background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.12); }
 
-  /* нижний левый блок аккаунта */
   .accountBox{
     position:absolute;
     left:16px;
@@ -193,7 +142,7 @@
     padding-top:12px;
     display:flex;
     gap:12px;
-    align-items:flex-start; /* FIX: чтобы ничего не лезло под кнопки */
+    align-items:flex-start;
     justify-content:space-between;
   }
   .avatar{
@@ -298,7 +247,6 @@
   .card b{ font-size:15px; font-weight:600; }
   .card small{ display:block; margin-top:6px; color:var(--muted); }
 
-  /* composer как на картинке 2 */
   .composerWrap{
     margin-top:auto;
     display:flex;
@@ -425,7 +373,6 @@
   }
   .sendCircle svg{ opacity:.6 }
 
-  /* модалки */
   .overlay{
     position:fixed;
     inset:0;
@@ -481,6 +428,223 @@
   }
   .modalWrap{ position:relative; }
 
+  /* BIG PICKER (competitor-like single panel) */
+  .nnOverlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.30);
+    display:none;
+    z-index:9000;
+  }
+  .nnOverlay.open{ display:block; }
+
+  .nnPanel{
+    position:absolute;
+    top:82px;
+    left:50%;
+    transform:translateX(-50%);
+    width: min(420px, calc(100vw - 24px));
+    max-height: min(620px, calc(100vh - 110px));
+    background:rgba(17,18,23,.92);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:18px;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    backdrop-filter: blur(10px);
+    display:flex;
+    flex-direction:column;
+  }
+
+  .nnTop{
+    padding:14px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .nnSearchRow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .nnSearch{
+    flex:1;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    border-radius:14px;
+    padding:10px 12px;
+    min-width:0;
+  }
+  .nnSearch svg{ opacity:.6; flex:0 0 auto; }
+  .nnSearch input{
+    width:100%;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:rgba(255,255,255,.92);
+    font-size:13px;
+  }
+  .nnSearch input::placeholder{ color:rgba(255,255,255,.45); }
+
+  .pinBtn{
+    width:36px;height:36px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .pinBtn:hover{ background:rgba(255,255,255,.08); }
+  .pinBtn svg{ opacity:.7; }
+
+  .nnTabs{
+    display:flex;
+    gap:10px;
+  }
+  .nnTab{
+    flex:1;
+    padding:10px 10px;
+    border-radius:16px;
+    border:1px solid transparent;
+    background:transparent;
+    color:rgba(255,255,255,.72);
+    cursor:pointer;
+    font-size:13px;
+    font-weight:500;
+  }
+  .nnTab.active{
+    background:rgba(255,255,255,.08);
+    border-color:rgba(255,255,255,.10);
+    color:rgba(255,255,255,.92);
+  }
+
+  .nnBody{
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    overflow:auto;
+  }
+
+  .nnList{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .nnItem{
+    width:100%;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    padding:12px 12px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.04);
+    cursor:pointer;
+    text-align:left;
+  }
+  .nnItem:hover{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.10); }
+  .nnItem.active{ background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.12); }
+
+  .nnLogo{
+    width:40px;height:40px;
+    border-radius:999px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+    overflow:hidden;
+  }
+  .nnLogo svg{ opacity:.85; }
+
+  .nnMeta{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    min-width:0;
+  }
+  .nnTitle{
+    font-size:15px;
+    font-weight:600;
+    color:rgba(255,255,255,.92);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .nnSub{
+    font-size:12px;
+    color:rgba(255,255,255,.50);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .nnModels{
+    border-top:1px solid rgba(255,255,255,.08);
+    padding-top:10px;
+  }
+  .nnModelsHeader{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px;
+    padding:2px 2px 10px 2px;
+  }
+  .nnModelsTitle{
+    font-size:13px;
+    font-weight:600;
+    color:rgba(255,255,255,.90);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .nnModelsHint{
+    font-size:12px;
+    color:rgba(255,255,255,.45);
+  }
+
+  .modelList{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .mItem{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 12px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.04);
+    cursor:pointer;
+    text-align:left;
+  }
+  .mItem:hover{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.10); }
+  .mItem.active{ background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.12); }
+  .mLeft{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .mName{ font-size:13px; font-weight:600; color:rgba(255,255,255,.92); }
+  .mDesc{ font-size:12px; color:rgba(255,255,255,.50); }
+  .mBadge{
+    font-size:11px;
+    color:rgba(255,255,255,.55);
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.04);
+    padding:6px 10px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+
   @media (max-width: 980px){
     main{ grid-template-columns: 1fr; }
     aside{ display:none; }
@@ -493,26 +657,10 @@
 
 <header>
   <div class="brand"><span class="brandDot"></span>OneAI</div>
-
-  <div class="modelPicker">
-    <button class="modelBtn" id="modelBtn" type="button">
-      <span id="modelBtnText">Выбор нейросети</span>
-      <span class="chev">▼</span>
-    </button>
-
-    <div class="modelMenu" id="modelMenu">
-      <div class="modelMenuTitle">Текст</div>
-      <button class="modelItem active" data-model="ChatGPT">ChatGPT</button>
-      <button class="modelItem" data-model="Claude">Claude</button>
-      <button class="modelItem" data-model="Gemini">Gemini</button>
-      <button class="modelItem" data-model="Perplexity">Perplexity</button>
-
-      <div class="modelMenuSep"></div>
-      <div class="modelMenuTitle">Скоро</div>
-      <button class="modelItem disabled" data-model="Suno">Suno</button>
-      <button class="modelItem disabled" data-model="Wan 2.6">Wan 2.6</button>
-    </div>
-  </div>
+  <button class="modelBtn" id="modelBtn" type="button">
+    <span>Выбор нейросети</span>
+    <span class="chev">▼</span>
+  </button>
 </header>
 
 <main>
@@ -529,7 +677,6 @@
       <div class="chatItem">Чат 2</div>
     </div>
 
-    <!-- До входа -->
     <div class="accountBox" id="accountGuest">
       <div class="accountLeft">
         <div class="avatar" aria-hidden="true">
@@ -540,7 +687,6 @@
         </div>
         <div class="accountText">
           <div class="accountName">Гость</div>
-          <!-- FIX: баланс гостю не показываем, чтобы не торчал кусок ₽ -->
         </div>
       </div>
       <div class="authBtns">
@@ -549,7 +695,6 @@
       </div>
     </div>
 
-    <!-- После входа -->
     <div class="accountBox" id="accountUser" style="display:none;">
       <div class="accountLeft">
         <div class="avatar" aria-hidden="true">
@@ -596,7 +741,6 @@
                 <path d="M13 13h6v6h-6v-6Z" stroke="white" stroke-width="1.7" opacity=".8"/>
               </svg>
             </div>
-
             <div class="prompt">
               <input id="promptInput" placeholder="Отправить сообщение" />
             </div>
@@ -618,7 +762,7 @@
                           stroke="white" stroke-width="1.6" opacity=".85"/>
                   </svg>
                 </span>
-                <span id="modelName">ChatGPT</span>
+                <span id="modelName">ChatGPT • Balanced</span>
               </div>
 
               <div class="micBtn" title="Микрофон (скоро)">
@@ -647,6 +791,48 @@
 
   </section>
 </main>
+
+<!-- BIG PICKER OVERLAY (competitor-like) -->
+<div class="nnOverlay" id="nnOverlay" aria-hidden="true">
+  <div class="nnPanel" role="dialog" aria-label="Выбор нейросети и модели">
+    <div class="nnTop">
+      <div class="nnSearchRow">
+        <div class="nnSearch">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M21 21l-4.3-4.3" stroke="white" stroke-width="1.7" stroke-linecap="round" opacity=".8"/>
+            <path d="M10.8 18.2a7.4 7.4 0 1 1 0-14.8 7.4 7.4 0 0 1 0 14.8Z" stroke="white" stroke-width="1.7" opacity=".8"/>
+          </svg>
+          <input id="nnSearchInput" placeholder="Быстрый поиск нейросетей" />
+        </div>
+
+        <button class="pinBtn" type="button" title="Закрепить (заглушка)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M14 3l7 7-3 1-3 7-2-2-3 3-1-1 3-3-2-2 7-3 1-3Z" stroke="white" stroke-width="1.6" stroke-linejoin="round" opacity=".85"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="nnTabs" id="nnTabs">
+        <button class="nnTab active" data-type="text" type="button">Текст</button>
+        <button class="nnTab" data-type="image" type="button">Картинка</button>
+        <button class="nnTab" data-type="video" type="button">Видео</button>
+        <button class="nnTab" data-type="voice" type="button">Голос</button>
+      </div>
+    </div>
+
+    <div class="nnBody">
+      <div class="nnList" id="nnList"></div>
+
+      <div class="nnModels" id="nnModels">
+        <div class="nnModelsHeader">
+          <div class="nnModelsTitle" id="nnModelsTitle">ChatGPT</div>
+          <div class="nnModelsHint">выбери модель</div>
+        </div>
+        <div class="modelList" id="modelList"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- REGISTER MODAL -->
 <div class="overlay" id="regOverlay">
@@ -704,33 +890,7 @@
 </div>
 
 <script>
-  // ====== MODEL PICKER (static) ======
-  const modelBtn = document.getElementById('modelBtn');
-  const modelMenu = document.getElementById('modelMenu');
-  const modelName = document.getElementById('modelName');
-
-  modelBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    modelMenu.classList.toggle('open');
-  });
-
-  modelMenu.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const btn = e.target.closest('.modelItem');
-    if(!btn) return;
-    if(btn.classList.contains('disabled')) return;
-
-    modelMenu.querySelectorAll('.modelItem').forEach(x => x.classList.remove('active'));
-    btn.classList.add('active');
-
-    modelName.textContent = btn.dataset.model;
-    modelMenu.classList.remove('open');
-  });
-
-  document.addEventListener('click', () => modelMenu.classList.remove('open'));
-  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') modelMenu.classList.remove('open'); });
-
-  // ====== AUTH (demo localStorage) ======
+  // AUTH (demo localStorage)
   const KEY_USERS = "oneai_users";
   const KEY_CURRENT = "oneai_current";
 
@@ -739,10 +899,7 @@
   const userNameEl = document.getElementById('userName');
   const userBalEl  = document.getElementById('userBalance');
 
-  function getUsers(){
-    try { return JSON.parse(localStorage.getItem(KEY_USERS)) || []; }
-    catch { return []; }
-  }
+  function getUsers(){ try { return JSON.parse(localStorage.getItem(KEY_USERS)) || []; } catch { return []; } }
   function setUsers(users){ localStorage.setItem(KEY_USERS, JSON.stringify(users)); }
   function getCurrent(){ return localStorage.getItem(KEY_CURRENT); }
   function setCurrent(login){ localStorage.setItem(KEY_CURRENT, login); }
@@ -750,28 +907,17 @@
 
   function renderAccount(){
     const login = getCurrent();
-    if(!login){
-      accountGuest.style.display = "flex";
-      accountUser.style.display = "none";
-      return;
-    }
+    if(!login){ accountGuest.style.display="flex"; accountUser.style.display="none"; return; }
     const user = getUsers().find(u => u.login === login);
-    if(!user){
-      clearCurrent();
-      accountGuest.style.display = "flex";
-      accountUser.style.display = "none";
-      return;
-    }
-    accountGuest.style.display = "none";
-    accountUser.style.display = "flex";
+    if(!user){ clearCurrent(); accountGuest.style.display="flex"; accountUser.style.display="none"; return; }
+    accountGuest.style.display="none";
+    accountUser.style.display="flex";
     userNameEl.textContent = user.name;
     userBalEl.textContent = user.balance ?? 0;
   }
 
-  // modals
   const regOverlay = document.getElementById('regOverlay');
   const loginOverlay = document.getElementById('loginOverlay');
-
   function openOverlay(el){ el.classList.add('open'); }
   function closeOverlay(el){ el.classList.remove('open'); }
 
@@ -784,20 +930,15 @@
 
   document.getElementById('btnRegister').addEventListener('click', ()=> openOverlay(regOverlay));
   document.getElementById('btnLogin').addEventListener('click', ()=> openOverlay(loginOverlay));
-  document.getElementById('btnLogout').addEventListener('click', ()=>{
-    clearCurrent();
-    renderAccount();
-  });
+  document.getElementById('btnLogout').addEventListener('click', ()=>{ clearCurrent(); renderAccount(); });
 
   document.getElementById('regSubmit').addEventListener('click', ()=>{
     const name = document.getElementById('regName').value.trim();
     const login = document.getElementById('regLogin').value.trim();
     const pass = document.getElementById('regPass').value.trim();
     if(!name || !login || !pass) return alert("Заполни всё");
-
     const users = getUsers();
     if(users.some(u => u.login === login)) return alert("Логин занят");
-
     users.push({ name, login, pass, balance: 0 });
     setUsers(users);
     setCurrent(login);
@@ -809,10 +950,8 @@
     const login = document.getElementById('logLogin').value.trim();
     const pass = document.getElementById('logPass').value.trim();
     if(!login || !pass) return alert("Заполни всё");
-
     const user = getUsers().find(u => u.login === login && u.pass === pass);
     if(!user) return alert("Неверный логин или пароль");
-
     setCurrent(login);
     closeOverlay(loginOverlay);
     renderAccount();
@@ -820,10 +959,198 @@
 
   renderAccount();
 
-  // send button (visual only)
+  // SEND (visual only)
   document.getElementById('sendBtn').addEventListener('click', ()=>{
     alert("Пока без бэка. Следующий шаг — подключение модели.");
   });
+
+  // PICKER DATA (без иконок, заглушки svg)
+  const PROVIDERS = [
+    { id:"chatgpt", name:"ChatGPT", org:"OpenAI", type:"text" },
+    { id:"claude", name:"Claude", org:"Anthropic", type:"text" },
+    { id:"gemini", name:"Gemini", org:"Google DeepMind", type:"text" },
+    { id:"perplexity", name:"Perplexity", org:"Perplexity AI", type:"text" },
+    { id:"qwen", name:"Qwen", org:"Alibaba", type:"text" },
+
+    { id:"midjourney", name:"Midjourney", org:"", type:"image" },
+    { id:"sd", name:"Stable Diffusion", org:"", type:"image" },
+
+    { id:"runway", name:"Runway", org:"", type:"video" },
+    { id:"wan", name:"Wan 2.6", org:"", type:"video" },
+
+    { id:"whisper", name:"Whisper", org:"OpenAI", type:"voice" },
+    { id:"eleven", name:"ElevenLabs", org:"", type:"voice" },
+  ];
+
+  const MODELS = {
+    chatgpt: [
+      { id:"balanced", title:"Balanced", desc:"универсально, норм скорость", badge:"по умолчанию" },
+      { id:"fast", title:"Fast", desc:"быстро, проще ответы", badge:"дёшево" },
+      { id:"pro", title:"Pro", desc:"умнее, медленнее", badge:"лучше" },
+    ],
+    claude: [
+      { id:"sonnet", title:"Sonnet", desc:"универсально", badge:"по умолчанию" },
+      { id:"haiku", title:"Haiku", desc:"быстро", badge:"скорость" },
+      { id:"opus", title:"Opus", desc:"качество", badge:"лучше" },
+    ],
+    gemini: [
+      { id:"balanced", title:"Balanced", desc:"универсально", badge:"по умолчанию" },
+      { id:"pro", title:"Pro", desc:"качество", badge:"лучше" },
+    ],
+    perplexity: [
+      { id:"search", title:"Search", desc:"поиск и ответы", badge:"поиск" },
+      { id:"balanced", title:"Balanced", desc:"универсально", badge:"по умолчанию" },
+    ],
+    qwen: [
+      { id:"balanced", title:"Balanced", desc:"универсально", badge:"по умолчанию" },
+      { id:"fast", title:"Fast", desc:"быстро", badge:"скорость" },
+    ],
+    midjourney: [{ id:"v1", title:"v1", desc:"генерация изображений", badge:"скоро" }],
+    sd: [{ id:"xl", title:"XL", desc:"генерация изображений", badge:"скоро" }],
+    runway: [{ id:"v1", title:"v1", desc:"видео", badge:"скоро" }],
+    wan: [{ id:"v1", title:"v1", desc:"видео", badge:"скоро" }],
+    whisper: [{ id:"base", title:"Base", desc:"распознавание речи", badge:"скоро" }],
+    eleven: [{ id:"v1", title:"v1", desc:"синтез голоса", badge:"скоро" }],
+  };
+
+  function logoSvg(providerId){
+    const common = `stroke="white" stroke-width="1.6" opacity=".85"`;
+    if(providerId === "claude") return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 18H5L12 3Z" ${common}/></svg>`;
+    if(providerId === "gemini") return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l3.2 6.6L22 12l-6.8 2.4L12 21l-3.2-6.6L2 12l6.8-2.4L12 3Z" ${common}/></svg>`;
+    if(providerId === "perplexity") return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 7h10v10H7V7Z" ${common}/><path d="M12 7v10" ${common}/><path d="M7 12h10" ${common}/></svg>`;
+    if(providerId === "qwen") return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 4a8 8 0 1 0 8 8" ${common}/><path d="M20 12l-3 0" ${common}/></svg>`;
+    if(providerId === "midjourney") return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 17c2-6 8-6 10 0" ${common}/><path d="M9 10h.01" ${common}/><path d="M15 10h.01" ${common}/></svg>`;
+    if(providerId === "sd") return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 4v16" ${common}/><path d="M4 12h16" ${common}/></svg>`;
+    if(providerId === "runway" || providerId === "wan") return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 7h8v10H8V7Z" ${common}/><path d="M16 12l4-2v4l-4-2Z" ${common}/></svg>`;
+    if(providerId === "whisper" || providerId === "eleven") return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Z" ${common}/><path d="M19 11a7 7 0 0 1-14 0" ${common}/></svg>`;
+    return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3.2c2.3 0 4.3 1.3 5.3 3.3 2 .6 3.4 2.4 3.4 4.6 0 2.7-2.2 4.9-4.9 4.9-.3 0-.6 0-.9-.1-1.1 1.8-3.1 3-5.4 3-2.3 0-4.3-1.3-5.3-3.3-2-.6-3.4-2.4-3.4-4.6 0-2.7 2.2-4.9 4.9-4.9.3 0 .6 0 .9.1C7.7 4.4 9.7 3.2 12 3.2Z" ${common}/></svg>`;
+  }
+
+  // PICKER LOGIC
+  const modelNameEl = document.getElementById("modelName");
+  const nnOverlay = document.getElementById("nnOverlay");
+  const nnList = document.getElementById("nnList");
+  const modelList = document.getElementById("modelList");
+  const nnModelsTitle = document.getElementById("nnModelsTitle");
+  const nnSearchInput = document.getElementById("nnSearchInput");
+  const nnTabs = document.getElementById("nnTabs");
+
+  let activeType = "text";
+  let activeProviderId = "chatgpt";
+  let activeModelId = (MODELS[activeProviderId]?.[0]?.id) || "balanced";
+
+  function openPicker(){
+    nnOverlay.classList.add("open");
+    nnOverlay.setAttribute("aria-hidden", "false");
+    nnSearchInput.value = "";
+    ensureActiveProvider(true);
+    renderProviders();
+    renderModels();
+    setTimeout(()=> nnSearchInput.focus(), 30);
+  }
+  function closePicker(){
+    nnOverlay.classList.remove("open");
+    nnOverlay.setAttribute("aria-hidden", "true");
+  }
+
+  document.getElementById("modelBtn").addEventListener("click", (e)=>{
+    e.stopPropagation();
+    nnOverlay.classList.contains("open") ? closePicker() : openPicker();
+  });
+
+  nnOverlay.addEventListener("click", (e)=>{
+    if(e.target === nnOverlay) closePicker();
+  });
+
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape") closePicker();
+  });
+
+  nnTabs.addEventListener("click", (e)=>{
+    const tab = e.target.closest(".nnTab");
+    if(!tab) return;
+    nnTabs.querySelectorAll(".nnTab").forEach(t=> t.classList.remove("active"));
+    tab.classList.add("active");
+    activeType = tab.dataset.type;
+    ensureActiveProvider(true);
+    renderProviders();
+    renderModels();
+  });
+
+  nnSearchInput.addEventListener("input", ()=>{
+    ensureActiveProvider(false);
+    renderProviders();
+    renderModels();
+  });
+
+  function filteredProviders(){
+    const q = nnSearchInput.value.trim().toLowerCase();
+    return PROVIDERS
+      .filter(p => p.type === activeType)
+      .filter(p => !q || (p.name.toLowerCase().includes(q) || (p.org||"").toLowerCase().includes(q)));
+  }
+
+  function ensureActiveProvider(forceFirst){
+    const items = filteredProviders();
+    if(!items.length) return;
+    if(forceFirst || !items.some(x=> x.id === activeProviderId)){
+      activeProviderId = items[0].id;
+      activeModelId = (MODELS[activeProviderId]?.[0]?.id) || "balanced";
+    }
+  }
+
+  function renderProviders(){
+    const items = filteredProviders();
+    nnList.innerHTML = items.map(p => {
+      const active = p.id === activeProviderId ? "active" : "";
+      return `
+        <button class="nnItem ${active}" type="button" data-id="${p.id}">
+          <div class="nnLogo">${logoSvg(p.id)}</div>
+          <div class="nnMeta">
+            <div class="nnTitle">${p.name}</div>
+            <div class="nnSub">${p.org || ""}</div>
+          </div>
+        </button>
+      `;
+    }).join("");
+
+    nnList.querySelectorAll(".nnItem").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        activeProviderId = btn.dataset.id;
+        activeModelId = (MODELS[activeProviderId]?.[0]?.id) || "balanced";
+        renderProviders();
+        renderModels();
+      });
+    });
+  }
+
+  function renderModels(){
+    const provider = PROVIDERS.find(p => p.id === activeProviderId);
+    nnModelsTitle.textContent = provider ? provider.name : "Модели";
+    const ms = MODELS[activeProviderId] || [];
+    modelList.innerHTML = ms.map(m=>{
+      const active = m.id === activeModelId ? "active" : "";
+      return `
+        <button class="mItem ${active}" type="button" data-mid="${m.id}">
+          <div class="mLeft">
+            <div class="mName">${m.title}</div>
+            <div class="mDesc">${m.desc || ""}</div>
+          </div>
+          <div class="mBadge">${m.badge || ""}</div>
+        </button>
+      `;
+    }).join("");
+
+    modelList.querySelectorAll(".mItem").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        activeModelId = btn.dataset.mid;
+        const pName = provider?.name || "Модель";
+        const mTitle = (MODELS[activeProviderId] || []).find(x=> x.id === activeModelId)?.title || "Balanced";
+        modelNameEl.textContent = `${pName} • ${mTitle}`;
+        closePicker();
+      });
+    });
+  }
 </script>
 
 </body>
