@@ -1,327 +1,291 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>OneAI</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
-:root {
-  --bg:#0f0f10;
-  --panel:#17181b;
-  --panel2:#1e2024;
+:root{
+  --bg:#0e0f11;
+  --bg2:#121316;
+  --panel:#1a1c20;
+  --panel2:#1f2126;
   --border:#2a2c31;
   --text:#e6e6e6;
   --muted:#9a9a9a;
+  --accent:#3b82f6;
 }
-
-* { box-sizing:border-box; font-family:system-ui, sans-serif; }
-
-body {
+*{box-sizing:border-box;font-family:Inter,Segoe UI,system-ui,sans-serif}
+html,body{height:100%}
+body{
   margin:0;
-  background:var(--bg);
+  background:radial-gradient(1200px 600px at 50% 100%, #15171c 0%, var(--bg) 60%);
   color:var(--text);
   display:flex;
-  height:100vh;
 }
 
-/* sidebar */
-.sidebar {
+/* SIDEBAR */
+.sidebar{
   width:260px;
-  background:var(--panel);
+  background:linear-gradient(180deg, var(--bg2), #0f1013);
   border-right:1px solid var(--border);
   padding:14px;
   display:flex;
   flex-direction:column;
 }
-
-.sidebar h3 {
-  margin:0 0 10px;
-  font-size:14px;
-  color:var(--muted);
-}
-
-.chat-history {
-  flex:1;
-  background:var(--panel2);
-  border-radius:12px;
-  padding:10px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.sidebar-footer {
+.nav-btn{
   display:flex;
-  gap:10px;
-  margin-top:12px;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 12px;
+  border-radius:10px;
+  color:var(--text);
+  cursor:pointer;
 }
+.nav-btn:hover{background:#1e2026}
+.nav-btn span{color:var(--muted);font-size:14px}
 
-.avatar {
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  background:#2b2d33;
+.sidebar h4{
+  margin:14px 0 8px;
+  font-size:12px;
+  color:var(--muted);
+}
+.chat-empty{
+  flex:1;
+  background:#17191e;
+  border-radius:12px;
   display:flex;
   align-items:center;
   justify-content:center;
-}
-
-.btn {
-  border-radius:999px;
-  border:1px solid var(--border);
-  background:#202226;
-  color:var(--text);
-  padding:6px 12px;
+  color:#6f7280;
   font-size:13px;
 }
+.sidebar-footer{
+  margin-top:14px;
+}
+.login-btn{
+  width:100%;
+  background:#ffffff;
+  color:#000;
+  border:none;
+  border-radius:999px;
+  padding:10px 0;
+  font-weight:500;
+  cursor:pointer;
+}
+.sidebar-links{
+  margin-top:10px;
+  font-size:11px;
+  color:#6f7280;
+  line-height:1.6;
+}
 
-/* main */
-.main {
+/* MAIN */
+.main{
   flex:1;
   display:flex;
   flex-direction:column;
 }
 
-.topbar {
+/* TOP BAR */
+.topbar{
   height:56px;
-  border-bottom:1px solid var(--border);
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
+  position:relative;
 }
-
-.model-select {
+.topbar .pill{
   background:#1c1e22;
   border:1px solid var(--border);
   border-radius:999px;
-  padding:8px 16px;
-  cursor:pointer;
+  padding:8px 18px;
+  font-size:14px;
+  color:var(--text);
 }
-
-.messages {
-  flex:1;
-  padding:20px;
-  overflow-y:auto;
-}
-
-.msg {
-  max-width:70%;
-  margin-bottom:12px;
-  padding:10px 12px;
-  border-radius:12px;
-  line-height:1.4;
-}
-
-.msg.user {
-  background:#2a2c31;
-  margin-left:auto;
-}
-
-.msg.ai {
-  background:#1f2126;
-}
-
-.meta {
-  font-size:11px;
-  color:var(--muted);
-  margin-top:4px;
-}
-
-/* input */
-.input {
-  padding:14px;
-  border-top:1px solid var(--border);
-}
-
-.input-box {
-  background:#1a1c20;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:10px;
+.topbar .right-icons{
+  position:absolute;
+  right:16px;
   display:flex;
-  gap:8px;
-  align-items:flex-end;
+  gap:14px;
+  color:var(--muted);
 }
 
-textarea {
+/* CONTENT */
+.content{
+  padding:32px 40px 120px;
+}
+.hero{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+}
+.hero h1{
+  margin:0;
+  font-size:26px;
+}
+.hero p{
+  margin-top:6px;
+  font-size:14px;
+  color:var(--muted);
+  max-width:520px;
+}
+
+.story-row{
+  display:flex;
+  gap:10px;
+}
+.story{
+  padding:10px 14px;
+  border-radius:14px;
+  border:1px solid #2e3138;
+  background:#14161a;
+  font-size:13px;
+  white-space:nowrap;
+}
+
+.cards{
+  margin-top:28px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+.card{
+  background:var(--panel);
+  border-radius:16px;
+  padding:18px;
+}
+.card h3{margin:0 0 6px;font-size:18px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+
+.stats{
+  margin-top:22px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+.stat{
+  background:#17191e;
+  border-radius:14px;
+  padding:14px;
+}
+.stat strong{font-size:18px}
+.stat span{display:block;font-size:12px;color:var(--muted)}
+
+/* CHAT INPUT */
+.chat-input{
+  position:fixed;
+  left:300px;
+  right:40px;
+  bottom:24px;
+}
+.chat-box{
+  background:#1b1d22;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.chat-box input{
   flex:1;
   background:none;
   border:none;
   outline:none;
   color:var(--text);
-  resize:none;
-  min-height:36px;
+  font-size:15px;
 }
-
-.model-name {
-  font-size:12px;
-  color:var(--muted);
+.chat-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
-
-.send {
-  background:#fff;
-  color:#000;
-  border-radius:50%;
+.round{
   width:32px;
   height:32px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
+  border-radius:50%;
+  background:#fff;
 }
 
-/* modal */
-.modal {
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:10;
+@media(max-width:900px){
+  .sidebar{display:none}
+  .chat-input{left:20px;right:20px}
+  .content{padding:24px 20px 120px}
+  .cards{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
 }
-
-.hidden { display:none; }
-
-.modal-box {
-  width:360px;
-  background:#181a1f;
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:14px;
-}
-
-.section {
-  margin-top:12px;
-}
-
-.section-title {
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:6px;
-}
-
-.model-item {
-  padding:8px 10px;
-  border-radius:8px;
-  display:flex;
-  justify-content:space-between;
-  cursor:pointer;
-}
-
-.model-item:hover { background:#22242a; }
-.model-item.disabled { color:#666; cursor:not-allowed; }
-.badge { font-size:11px; color:#4da3ff; }
 </style>
 </head>
-
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
-  <h3>Чаты</h3>
-  <div class="chat-history">История появится позже</div>
+  <div class="nav-btn"><span>Ассистенты GPTs</span>›</div>
+  <div class="nav-btn"><span>Инструменты AI</span>›</div>
+  <div class="nav-btn"><span>Креатив.Лаб</span>›</div>
+
+  <h4>Чаты</h4>
+  <div class="chat-empty">Здесь будет история диалогов</div>
+
   <div class="sidebar-footer">
-    <div class="avatar">👤</div>
-    <button class="btn">Войти</button>
+    <button class="login-btn">Войти / Зарегистрироваться</button>
+    <div class="sidebar-links">
+      Политика конфиденциальности<br>
+      Пользовательское соглашение<br>
+      Сайт разработчиков
+    </div>
   </div>
 </div>
 
+<!-- MAIN -->
 <div class="main">
   <div class="topbar">
-    <div class="model-select">Выбор модели</div>
+    <div class="pill">Быстрый выбор ▾</div>
+    <div class="right-icons">🌐 ⚙️</div>
   </div>
 
-  <div class="messages" id="messages"></div>
-
-  <div class="input">
-    <div class="input-box">
-      <textarea id="input" placeholder="Написать сообщение"></textarea>
-      <div class="model-name" id="modelLabel">GPT-5 mini</div>
-      <div class="send" id="send">➤</div>
-    </div>
-  </div>
-</div>
-
-<!-- modal -->
-<div class="modal hidden" id="modal">
-  <div class="modal-box">
-    <div class="section">
-      <div class="section-title">Текст</div>
-      <div class="model-item" data-model="GPT-5 mini">GPT-5 mini <span class="badge">Бесплатно</span></div>
-      <div class="model-item disabled">GPT-5 <span>Скоро</span></div>
-      <div class="model-item disabled">Claude <span>Скоро</span></div>
+  <div class="content">
+    <div class="hero">
+      <div>
+        <h1>Добро пожаловать в OneAI</h1>
+        <p>Все нейросети в одном месте. Используйте разные модели в едином интерфейсе.</p>
+      </div>
+      <div class="story-row">
+        <div class="story">Runway Act-two</div>
+        <div class="story">Гайды</div>
+        <div class="story">Suno</div>
+        <div class="story">Рефералы</div>
+      </div>
     </div>
 
-    <div class="section">
-      <div class="section-title">Картинка</div>
-      <div class="model-item disabled">Image AI <span>Скоро</span></div>
+    <div class="cards">
+      <div class="card"><h3>Suno</h3><p>Создание музыки с помощью ИИ</p></div>
+      <div class="card"><h3>Claude</h3><p>Мощная языковая модель</p></div>
+      <div class="card"><h3>Wan 2.6</h3><p>Генерация видео и аудио</p></div>
+      <div class="card"><h3>Perplexity</h3><p>Поиск с ИИ‑ответами</p></div>
     </div>
 
-    <div class="section">
-      <div class="section-title">Видео</div>
-      <div class="model-item disabled">Video AI <span>Скоро</span></div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Голос</div>
-      <div class="model-item disabled">Voice AI <span>Скоро</span></div>
+    <div class="stats">
+      <div class="stat"><strong>1.5M+</strong><span>пользователей</span></div>
+      <div class="stat"><strong>100+</strong><span>моделей</span></div>
+      <div class="stat"><strong>10M+</strong><span>запросов</span></div>
+      <div class="stat"><strong>3K+</strong><span>бизнес аккаунтов</span></div>
     </div>
   </div>
 </div>
 
-<script>
-let currentModel = "GPT-5 mini";
-
-const modal = document.getElementById("modal");
-document.querySelector(".model-select").onclick = () => modal.classList.remove("hidden");
-modal.onclick = e => { if(e.target === modal) modal.classList.add("hidden"); };
-
-document.querySelectorAll(".model-item[data-model]").forEach(item => {
-  item.onclick = () => {
-    currentModel = item.dataset.model;
-    document.getElementById("modelLabel").textContent = currentModel;
-    modal.classList.add("hidden");
-  };
-});
-
-const messages = document.getElementById("messages");
-const input = document.getElementById("input");
-
-document.getElementById("send").onclick = sendMessage;
-
-function sendMessage() {
-  if (!input.value.trim()) return;
-
-  addMsg(input.value, "user");
-  const prompt = input.value;
-  input.value = "";
-
-  setTimeout(() => {
-    const reply = fakeAI(prompt);
-    addMsg(reply, "ai");
-  }, 600);
-}
-
-function addMsg(text, role) {
-  const div = document.createElement("div");
-  div.className = "msg " + role;
-  div.textContent = text;
-
-  if (role === "ai") {
-    const meta = document.createElement("div");
-    meta.className = "meta";
-    meta.textContent = `${text.length} символов · ${currentModel}`;
-    div.appendChild(meta);
-  }
-
-  messages.appendChild(div);
-  messages.scrollTop = messages.scrollHeight;
-}
-
-function fakeAI(prompt) {
-  return `(${currentModel}) Ответ на: "${prompt}". Это заглушка, но логика уже рабочая.`;
-}
-</script>
+<!-- CHAT INPUT -->
+<div class="chat-input">
+  <div class="chat-box">
+    📎
+    <input placeholder="Отправить сообщение" />
+    <div class="chat-actions">
+      <div class="round"></div>
+      🎤
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
